@@ -12,9 +12,9 @@ knife4j:
     title: Midjourney Proxy API文档
     description: 代理 MidJourney 的discord频道，实现api形式调用AI绘图
     concat: novicezk
-    url: https://github.com/novicezk/midjourney-proxy
+    url: https://github.com/liaobw/midjourney-proxy
     version: v2.5.5
-    terms-of-service-url: https://github.com/novicezk/midjourney-proxy
+    terms-of-service-url: https://github.com/liaobw/midjourney-proxy
     group:
       api:
         group-name: API
