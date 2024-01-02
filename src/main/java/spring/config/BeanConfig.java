@@ -8,6 +8,7 @@ import com.github.novicezk.midjourney.service.NotifyService;
 import com.github.novicezk.midjourney.service.TaskStoreService;
 import com.github.novicezk.midjourney.service.TranslateService;
 import com.github.novicezk.midjourney.service.store.InMemoryTaskStoreServiceImpl;
+import com.github.novicezk.midjourney.service.store.MysqlTaskStoreServiceImpl;
 import com.github.novicezk.midjourney.service.store.RedisTaskStoreServiceImpl;
 import com.github.novicezk.midjourney.service.translate.BaiduTranslateServiceImpl;
 import com.github.novicezk.midjourney.service.translate.GPTTranslateServiceImpl;
@@ -24,6 +25,7 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
@@ -38,6 +40,9 @@ public class BeanConfig {
 	private ApplicationContext applicationContext;
 	@Autowired
 	private ProxyProperties properties;
+
+	@Autowired //是用在JavaBean中的注解，通过byType形式，用来给指定的字段或方法注入所需的外部资源。
+	private JdbcTemplate jdbcTemplate;
 
 	@Bean
 	TranslateService translateService() {
@@ -55,6 +60,7 @@ public class BeanConfig {
 		return switch (type) {
 			case IN_MEMORY -> new InMemoryTaskStoreServiceImpl(timeout);
 			case REDIS -> new RedisTaskStoreServiceImpl(timeout, taskRedisTemplate(redisConnectionFactory));
+			case MYSQL -> new MysqlTaskStoreServiceImpl(this.jdbcTemplate);
 		};
 	}
 
@@ -95,6 +101,5 @@ public class BeanConfig {
 		}
 		return new DiscordAccountHelper(discordHelper, this.properties, restTemplate(), taskStoreService, notifyService, messageHandlers(), paramsMap);
 	}
-
 
 }

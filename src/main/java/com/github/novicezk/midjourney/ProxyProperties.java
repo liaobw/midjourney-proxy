@@ -157,7 +157,11 @@ public class ProxyProperties {
 			/**
 			 * in_memory.
 			 */
-			IN_MEMORY
+			IN_MEMORY,
+			/**
+			 * mysql
+			 */
+			MYSQL;
 		}
 	}
 
